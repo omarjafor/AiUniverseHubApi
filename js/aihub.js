@@ -22,7 +22,6 @@ const displayAiHub = aihub => {
                 <li>${aiItem.features[2]}</li>
             </ol>
             
-            
             <div class="card-actions flex justify-between">
                 <div>
                     <h2 class="font-bold text-xl mt-4">${aiItem.name}</h2>
@@ -52,11 +51,20 @@ const showAiDetails = (aiDetails) => {
     console.log(aiDetails);
     const showDetailContainer = document.getElementById('show-detail-container');
     showDetailContainer.innerHTML = `
-        <img src="${aiDetails.image_link[0]}" alt="" class="mx-auto" />
-        <h3 class="font-bold text-3xl my-6">${aiDetails.tool_name}</h3>
-        
+        <div class="flex gap-5">
+            <div>
+                <h3 class="font-bold text-xl my-6">${aiDetails.description}</h3>
+            </div>
+            <div>
+                <img src="${aiDetails.image_link[0]}" alt="" class="mx-auto" />
+                <div class="text-center">
+                    <h3 class="font-bold text-xl my-2">${aiDetails.input_output_examples[0].input}</h3>
+                    <h3 class="text-xl my-4">${aiDetails.input_output_examples[0].output}</h3>
+                </div>
+            </div>
+        </div>
     `;
-    
+
     show_details_modal.showModal();
 }
 
