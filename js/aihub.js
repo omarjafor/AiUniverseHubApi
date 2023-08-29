@@ -9,7 +9,7 @@ const loadAiHub = async () => {
 
 const displayAiHub = aihub => {
     const aiHubContainer = document.getElementById('phone-container');
-    aihub.forEach(aiItem => {
+    aihub.slice(0,6).forEach(aiItem => {
         // console.log(aiItem);
         const aiCard = document.createElement('div');
         aiCard.classList = `card bg-gray-100 p-5 m-2 shadow-xl`;
