@@ -2,8 +2,9 @@ const loadAiHub = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/ai/tools');
     const data = await res.json();
     const aihub = data.data.tools;
-    // console.log(aihub);
+    console.log(aihub);
     displayAiHub(aihub);
+    sortByDate(aihub);
 }
 
 const displayAiHub = aihub => {
@@ -13,7 +14,7 @@ const displayAiHub = aihub => {
         const aiCard = document.createElement('div');
         aiCard.classList = `card bg-gray-100 p-5 m-2 shadow-xl`;
         aiCard.innerHTML = `
-        <figure><img src="${aiItem.image}" alt="Shoes" /></figure>
+        <figure><img src="${aiItem?.image || 'jasper.jpg'}" alt="Shoes" /></figure>
         <div class="card-body py-6 px-0">
             <h2 class="font-bold text-2xl">Features</h2>
             <ol class="list-decimal pb-4 list-inside border-b border-solid border-gray-400">
@@ -67,6 +68,12 @@ const showAiDetails = (aiDetails) => {
     `;
 
     show_details_modal.showModal();
+}
+
+const sortByDate = data =>{
+    data.forEach(item => {
+        console.log(item.published_in);
+    });
 }
 
 
