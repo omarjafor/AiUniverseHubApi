@@ -76,7 +76,6 @@ const sortByDate = data =>{
     });
 }
 
-
 loadAiHub();
 /*
 const loadPhone = async (searchText, isShowAll) => {
