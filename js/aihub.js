@@ -54,6 +54,7 @@ const showAiDetails = (aiDetails) => {
         <div class="flex gap-5">
             <div>
                 <h3 class="font-bold text-xl my-6">${aiDetails.description}</h3>
+                
             </div>
             <div>
                 <img src="${aiDetails.image_link[0]}" alt="" class="mx-auto" />
