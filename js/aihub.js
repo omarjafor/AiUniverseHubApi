@@ -1,5 +1,6 @@
 const sortByDateButton = document.getElementById('sortByDate');
-const loadAiHub = async () => {
+const showAllContainer = document.getElementById('show-all-container');
+const loadAiHub = async (isShowAll) => {
     const res = await fetch('https://openapi.programming-hero.com/api/ai/tools');
     const data = await res.json();
     const aihub = data.data.tools;
@@ -10,14 +11,21 @@ const loadAiHub = async () => {
         })
         const data = [...aihub];
         console.log(data);
-        displayAiHub(data);
+        displayAiHub(data, isShowAll);
     });
-    displayAiHub(aihub);
+    displayAiHub(aihub, isShowAll);
 }
 
-const displayAiHub = aihub => {
+const displayAiHub = (aihub, isShowAll) => {
+    if (aihub.length > 6 && !isShowAll) {
+        aihub = aihub.slice(0, 6);
+        showAllContainer.classList.remove('hidden');
+    } else {
+        showAllContainer.classList.add('hidden');
+    }
     const aiHubContainer = document.getElementById('phone-container');
     // aihub = aihub.slice(0, 6)
+    
     aiHubContainer.innerHTML = '';
     aihub.forEach(aiItem => {
         // console.log(aiItem);
@@ -51,21 +59,35 @@ const displayAiHub = aihub => {
 }
 
 const handleShowDetail = async (id) =>{
-    const res = await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`);
-    const data = await res.json();
-    const aiDetails = data.data;
-    // console.log(aiDetails);
-    showAiDetails(aiDetails);
+    try{
+        const res = await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`);
+        const data = await res.json();
+        const aiDetails = data.data;
+        console.log(aiDetails);
+        showAiDetails(aiDetails);
+    }
+    catch(err){
+        console.log(err);
+    }
 }
 
 const showAiDetails = (aiDetails) => {
+
+    const allPricePlane = [];
+    if (aiDetails.pricing) {
+        aiDetails.pricing.forEach(element => {
+            allPricePlane.push(element);
+        });
+    }
+
     const allFeatures = [];
     if (aiDetails.features) {
         for (const index in aiDetails.features) {
             allFeatures.push(aiDetails.features[index].feature_name);
         }
     }
-    console.log(aiDetails);
+
+    // console.log(aiDetails);
     const showDetailContainer = document.getElementById('show-detail-container');
     showDetailContainer.innerHTML = `
         <div class="flex gap-5">
@@ -73,16 +95,16 @@ const showAiDetails = (aiDetails) => {
                 <h3 class="font-bold text-xl my-6">${aiDetails.description}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
                     <div class="bg-white rounded-md p-4">
-                        <p class="text-green-600 font-bold">${aiDetails.pricing[0].price ? aiDetails.pricing[0].price : 'Free of Cost/'}</p>
-                        <p class="text-green-600 font-bold">${aiDetails.pricing[0].plan ? aiDetails.pricing[0].plan : 'Basic'}</p>
+                        <p class="text-green-600 font-bold">${allPricePlane.length > 0 && allPricePlane[0].price ? allPricePlane[0].price : 'Free of Cost/'}</p>
+                        <p class="text-green-600 font-bold">${allPricePlane.length > 0 && allPricePlane[0].plan ? allPricePlane[0].plan : 'Basic'}</p>
                     </div>
                     <div class="bg-white rounded-md p-4">
-                        <p class="text-orange-600 font-bold">${aiDetails.pricing[1].price ? aiDetails.pricing[1].price : 'Free of Cost/'}</p>
-                        <p class="text-orange-600 font-bold">${aiDetails.pricing[1].plan ? aiDetails.pricing[1].plan : 'Pro'}</p>
+                        <p class="text-orange-600 font-bold">${allPricePlane.length > 0 && allPricePlane[1].price ? allPricePlane[1].price : 'Free of Cost/'}</p>
+                        <p class="text-orange-600 font-bold">${allPricePlane.length > 0 && allPricePlane[1].plan ? allPricePlane[1].plan : 'Pro'}</p>
                     </div>
                     <div class="bg-white rounded-md p-4">
-                        <p class="text-red-600 font-bold">${aiDetails.pricing[2].price ? aiDetails.pricing[2].price : 'Free of Cost/'}</p>
-                        <p class="text-red-600 font-bold">${aiDetails.pricing[2].plan ? aiDetails.pricing[2].plan : 'Enterprise'}</p>
+                        <p class="text-red-600 font-bold">${allPricePlane.length > 0 && allPricePlane[2].price ? allPricePlane[2].price : 'Free of Cost/'}</p>
+                        <p class="text-red-600 font-bold">${allPricePlane.length > 0 && allPricePlane[2].plan ? allPricePlane[2].plan : 'Enterprise'}</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -103,8 +125,8 @@ const showAiDetails = (aiDetails) => {
             <div class="border border-orange-300 rounded-md shadow-md p-6">
                 <img src="${aiDetails.image_link[0]}" alt="" class="mx-auto" />
                 <div class="text-center">
-                    <h3 class="font-bold text-xl my-2">${aiDetails.input_output_examples[0].input}</h3>
-                    <h3 class="text-xl my-4">${aiDetails.input_output_examples[0].output}</h3>
+                    <h3 class="font-bold text-xl my-2">${aiDetails.input_output_examples && aiDetails.input_output_examples.length > 0 ? aiDetails.input_output_examples[0].input : 'Can you give any example?'}</h3>
+                    <h3 class="text-xl my-4">${aiDetails.input_output_examples && aiDetails.input_output_examples.length > 0 ? aiDetails.input_output_examples[0].output : 'No! Not Yet! Take a break!!!'}</h3>
                 </div>
             </div>
         </div>
@@ -113,104 +135,8 @@ const showAiDetails = (aiDetails) => {
     show_details_modal.showModal();
 }
 
+const handleShowAll = () => {
+    loadAiHub(true);
+}
 
 loadAiHub();
-/*
-const loadPhone = async (searchText, isShowAll) => {
-    const res = await fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`);
-    const data = await res.json();
-    const phones = data.data;
-    // console.log(phones);
-    displayPhones(phones, isShowAll);
-}
-
-const displayPhones = (phones, isShowAll) => {
-    const resultsContainer = document.getElementById("results");
-    if (phones.length === 0) {
-        resultsContainer.textContent = "Nothing Found! No Items Matched";
-    }else{
-        resultsContainer.textContent = '';
-    }
-    const phoneContainer = document.getElementById('phone-container');
-    
-    phoneContainer.textContent = '';
-
-    const showAllContainer = document.getElementById('show-all-container');
-    if(phones.length > 10 && !isShowAll){
-        showAllContainer.classList.remove('hidden');
-    }else{
-        showAllContainer.classList.add('hidden');
-    }
-
-    if(!isShowAll){
-        phones = phones.slice(0, 9);
-    }
-    
-    phones.forEach(phone => {
-        const phoneCard = document.createElement('div');
-        phoneCard.classList = `card bg-gray-100 p-3 m-2 shadow-xl`;
-        phoneCard.innerHTML = `
-        <figure><img src="${phone.image}" alt="Shoes" /></figure>
-        <div class="card-body text-center">
-            <h2 class="text-center font-bold text-2xl">${phone.phone_name}</h2>
-            <p>There are many variations of passages of available, but the majority have suffered</p>
-            <h2 class="text-center font-bold text-xl">$999</h2>
-            <div class="card-actions justify-center">
-                <button onclick="handleShowDetail('${phone.slug}')" class="btn btn-primary">Show Details</button>
-            </div>
-        </div>
-        `;
-        phoneContainer.appendChild(phoneCard);
-    });
-    toggleLoadingSpinner(false);
-}
-
-const handleSearch = (isShowAll) => {
-    toggleLoadingSpinner(true);
-    const searchField = document.getElementById('search-field');
-    const searchText = searchField.value;
-    // console.log(searchText);
-    loadPhone(searchText, isShowAll);
-}
-
-const toggleLoadingSpinner = (isLoading) => {
-    const loadingSpinner = document.getElementById('loading-spinner');
-    if(isLoading){
-        loadingSpinner.classList.remove('hidden');
-    }else{
-        loadingSpinner.classList.add('hidden');
-    }
-}
-
-const handleShowAll = () => {
-    handleSearch(true);
-}
-
-const handleShowDetail = async (id) => {
-    const res = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
-    const data = await res.json();
-    const phone = data.data;
-    showPhoneDetails(phone);
-}
-
-const showPhoneDetails = (phone) => {
-    console.log(phone);
-    const showDetailContainer = document.getElementById('show-detail-container');
-    showDetailContainer.innerHTML = `
-        <img src="${phone.image}" alt="" class="mx-auto" />
-        <h3 class="font-bold text-3xl my-6">${phone.name}</h3>
-        <p class="my-5">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-        <p class="my-4"><span class="font-semibold">Storage:</span> ${phone.mainFeatures.storage} </p>
-        <p class="my-4"><span class="font-semibold">Display Size:</span> ${phone.mainFeatures.displaySize} </p>
-        <p class="my-4"><span class="font-semibold">Chipset:</span> ${phone.mainFeatures.chipSet} </p>
-        <p class="my-4"><span class="font-semibold">Memory:</span> ${phone.mainFeatures.memory} </p>
-        <p class="my-4"><span class="font-semibold">Slug:</span> ${phone.slug} </p>
-        <p class="my-4"><span class="font-semibold">Release Date:</span> ${phone.releaseDate} </p>
-        <p class="my-4"><span class="font-semibold">Brand:</span> ${phone.brand} </p>
-        <p class="my-4"><span class="font-semibold">GPS:</span> ${phone?.others?.GPS || 'No GPS Available'} </p>
-    `;
-
-    show_details_modal.showModal();
-}
-loadPhone('a');
-*/
