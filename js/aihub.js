@@ -65,7 +65,20 @@ const showAiDetails = (aiDetails) => {
         <div class="flex gap-5">
             <div>
                 <h3 class="font-bold text-xl my-6">${aiDetails.description}</h3>
-                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
+                    <div class="bg-white rounded-md p-4">
+                        <p class="text-green-600 font-bold">${aiDetails.pricing[0].price ? aiDetails.pricing[0].price : 'Free of Cost/'}</p>
+                        <p class="text-green-600 font-bold">${aiDetails.pricing[0].plan ? aiDetails.pricing[0].plan : 'Basic'}</p>
+                    </div>
+                    <div class="bg-white rounded-md p-4">
+                        <p class="text-orange-600 font-bold">${aiDetails.pricing[1].price ? aiDetails.pricing[1].price : 'Free of Cost/'}</p>
+                        <p class="text-orange-600 font-bold">${aiDetails.pricing[1].plan ? aiDetails.pricing[1].plan : 'Pro'}</p>
+                    </div>
+                    <div class="bg-white rounded-md p-4">
+                        <p class="text-red-600 font-bold">${aiDetails.pricing[2].price ? aiDetails.pricing[2].price : 'Free of Cost/'}</p>
+                        <p class="text-red-600 font-bold">${aiDetails.pricing[2].plan ? aiDetails.pricing[2].plan : 'Enterprise'}</p>
+                    </div>
+                </div>
             </div>
             <div>
                 <img src="${aiDetails.image_link[0]}" alt="" class="mx-auto" />
