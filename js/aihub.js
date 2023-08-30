@@ -63,7 +63,7 @@ const showAiDetails = (aiDetails) => {
     const showDetailContainer = document.getElementById('show-detail-container');
     showDetailContainer.innerHTML = `
         <div class="flex gap-5">
-            <div>
+            <div class="bg-orange-50 border border-orange-300 rounded-md shadow-md p-6">
                 <h3 class="font-bold text-xl my-6">${aiDetails.description}</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
                     <div class="bg-white rounded-md p-4">
@@ -80,7 +80,7 @@ const showAiDetails = (aiDetails) => {
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="border border-orange-300 rounded-md shadow-md p-6">
                 <img src="${aiDetails.image_link[0]}" alt="" class="mx-auto" />
                 <div class="text-center">
                     <h3 class="font-bold text-xl my-2">${aiDetails.input_output_examples[0].input}</h3>
