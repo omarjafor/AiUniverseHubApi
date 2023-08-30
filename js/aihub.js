@@ -4,17 +4,16 @@ const loadAiHub = async (isShowAll) => {
     const res = await fetch('https://openapi.programming-hero.com/api/ai/tools');
     const data = await res.json();
     const aihub = data.data.tools;
+    displayAiHub(aihub, isShowAll);
     // console.log(aihub);
     sortByDateButton.addEventListener('click', function(){
         aihub.sort((a, b) => {
             return new Date(b.published_in) - new Date(a.published_in);
         })
         const data = [...aihub];
-        
         // console.log(data);
         displayAiHub(data, isShowAll);
     });
-    displayAiHub(aihub, isShowAll);
 }
 
 const displayAiHub = (aihub, isShowAll) => {
