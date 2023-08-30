@@ -59,6 +59,12 @@ const handleShowDetail = async (id) =>{
 }
 
 const showAiDetails = (aiDetails) => {
+    const allFeatures = [];
+    if (aiDetails.features) {
+        for (const index in aiDetails.features) {
+            allFeatures.push(aiDetails.features[index].feature_name);
+        }
+    }
     console.log(aiDetails);
     const showDetailContainer = document.getElementById('show-detail-container');
     showDetailContainer.innerHTML = `
@@ -77,6 +83,20 @@ const showAiDetails = (aiDetails) => {
                     <div class="bg-white rounded-md p-4">
                         <p class="text-red-600 font-bold">${aiDetails.pricing[2].price ? aiDetails.pricing[2].price : 'Free of Cost/'}</p>
                         <p class="text-red-600 font-bold">${aiDetails.pricing[2].plan ? aiDetails.pricing[2].plan : 'Enterprise'}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <h4 class="text-2xl font-semibold mb-4">Features</h4>
+                        <ul class="list-disc ml-8">
+                            ${allFeatures.length > 0 ? allFeatures.map(item => `<li>${item}</li>`).join('') : 'No data Found'}
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-semibold mb-4">Integrations</h4>
+                        <ul class="list-disc ml-8">
+                            ${aiDetails.integrations && aiDetails.integrations.length > 0 ? aiDetails.integrations.map(item => `<li>${item}</li>`).join('') : 'No data Found'}
+                        </ul>
                     </div>
                 </div>
             </div>
