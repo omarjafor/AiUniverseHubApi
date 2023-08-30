@@ -10,7 +10,8 @@ const loadAiHub = async (isShowAll) => {
             return new Date(b.published_in) - new Date(a.published_in);
         })
         const data = [...aihub];
-        console.log(data);
+        
+        // console.log(data);
         displayAiHub(data, isShowAll);
     });
     displayAiHub(aihub, isShowAll);
